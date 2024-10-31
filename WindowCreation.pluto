@@ -1,0 +1,35 @@
+local ffi = require "pluto:ffi"
+local GLFW = ffi.open("glfw3")
+
+-- GLFW Start
+
+-- Misc
+GLFW.glfwInit = GLFW:wrap("i8", "glfwInit") -- Returns: bool Success
+GLFW.glfwTerminate = GLFW:wrap("void", "glfwTerminate")
+
+-- Window Creation
+GLFW.glfwCreateWindow = GLFW:wrap("i64", "glfwCreateWindow", "i32", "i32", "str", "ptr", "ptr")
+GLFW.glfwMakeContextCurrent = GLFW:wrap("void", "glfwMakeContextCurrent", "i64")
+
+-- Window Handling
+GLFW.glfwWindowShouldClose = GLFW:wrap("i8", "glfwWindowShouldClose", "i64") -- Returns: bool ShouldClose | Arg 1: Window Ptr
+GLFW.glfwSwapBuffers = GLFW:wrap("void", "glfwSwapBuffers", "i64") -- Returns: void | Arg 1: Window Ptr
+GLFW.glfwPollEvents = GLFW:wrap("void", "glfwPollEvents")
+GLFW.glfwDestroyWindow = GLFW:wrap("void", "glfwDestroyWindow", "i64") -- Returns: void | Arg 1: Window Ptr
+
+-- GLFW End
+
+assert(GLFW.glfwInit() == 1, "Error: failed to initialize GLFW")
+local Window = GLFW.glfwCreateWindow(800, 800, "Pluto Window", ffi.nullptr, ffi.nullptr)
+assert(Window ~= ffi.nullptr, "Error: failed to create window")
+GLFW.glfwMakeContextCurrent(Window)
+
+while GLFW.glfwWindowShouldClose(Window) ~= 1 do
+    -- do stuff
+
+    GLFW.glfwSwapBuffers(Window);
+    GLFW.glfwPollEvents();
+end
+
+GLFW.glfwDestroyWindow(Window);
+GLFW.glfwTerminate();
